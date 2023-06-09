@@ -1,154 +1,144 @@
 #include<iostream>
-#include<stdlib.h>
 using namespace std;
-struct btree
-{
-	struct btree *lc;
-	char data;
-	struct btree *rc;	
+
+struct btree{
+	btree *lc;
+	int data;
+	btree *rc;
 };
 
-class mybtree
-{
+class MyBtree{
 	private:
-		btree *root;
+		btree* root;
+		
 	public:
-		mybtree();
-		void create_btree();
-		void insert_btree(btree *);
-		void rec_traversals();
+		MyBtree();
+		void create();
+		void insert(btree*);
+		void display();
+		void preorder(btree*);
+		void inorder(btree*);
+		void postorder(btree*);
 };
 
-mybtree::mybtree()
-	{
-		root=NULL;
-	}
+MyBtree::MyBtree(){
+	root=NULL;
+}
 
-void inorder(btree *temp)
-	{
-		if(temp != NULL)
-			{
-				inorder(temp->lc);
-				cout<<temp->data<<" ";
-				inorder(temp->rc);
-			}
+void MyBtree::insert(btree *node){
+	btree *par;
+	char ans;
+	if(root == NULL){
+		root =node;
 	}
-
-void preorder(btree *temp)
-	{
-		if(temp != NULL)
-			{
-				cout<<temp->data<<" ";
-				preorder(temp->lc);
-				preorder(temp->rc);
-			}
-	}
-
-void postorder(btree *temp)
-	{
-		if(temp != NULL)
-			{
-				postorder(temp->lc);
-				postorder(temp->rc);
-				cout<<temp->data<<" ";
-			}
-	}
-
-void mybtree::insert_btree(btree *node)
-	{
-		char ans;
-		btree *par;
-			if(root == NULL)
-				root=node;
-			else
-				{
-					par=root;
-					while(1)
-						{
-							cout<<"Where to add (l/r) of "<<par->data<<" : ";
-							cin>>ans;
-								if(ans == 'l')
-									{
-										if(par->lc == NULL)
-											{
-												par->lc = node;
-												break;
-											}
-										else
-											par = par->lc;
-									}
-								else
-									{
-										if(par->rc == NULL)
-											{
-												par->rc = node;
-												break;
-											}
-										else
-											par = par->rc;
-									}
-						}
-						cout<<"\nNode inserted successfully";
-				}
-	}
-
-void mybtree::create_btree()
-	{
-		int i,n;
-		btree *node;
-		cout<<"\nEnter the no of nodes in the tree: ";
-		cin>>n;
-			for(i = 1;i<=n;i++)
-				{
-					node = new btree;
-					cout<<"\nEnter the data field of node "<<i<<" : ";
-					cin>>node->data;
-					node->lc = NULL;
-					node->rc = NULL;
-					insert_btree(node);
-				}
-				cout<<"\nBinary tree created successfully";
-	}
-
-void mybtree::rec_traversals()
-	{
-		if(root==NULL)
-			{
-				cout<<"\nBinary tree is empty";
-			}
-		else
-			{
-				cout<<"\nInorder Traversal is : ";
-				inorder(root);
-				cout<<"\nPreorder Traversal is : ";
-				preorder(root);
-				cout<<"\nPostorder Traversal is : ";
-				postorder(root);
-			}
-	}
-int main()
-	{
-		mybtree b;
-		int ch;
-		system("clear");
-	
-			do{
-				cout<<"\n1:Create a Binary tree";
-				cout<<"\n2:Traversal of tree";
-				cout<<"\n5:Exit";
-				cout<<"\nEnter your choice : ";
-				cin>>ch;
+	else{
+		par=root;
 		
-				switch(ch)
-					{
-						case 1:b.create_btree();
-						break;
-						case 2:b.rec_traversals();
-						break;
-						case 5:cout<<"\nGod Bye";
-						break;
-					}
-			}while(ch!=5);
-	
-		return 0;
+		while(1){
+			cout<<"\nWhere to insert(l/r):- ";
+		    cin>>ans;
+		    if(ans=='l'){
+		    	
+				if(par->lc==NULL){
+		    		par->lc=node;
+		    		break;
+				}
+				else{
+					par=par->lc;
+				}
+			}
+			
+			
+			else{
+			
+				if(par->rc == NULL){
+					par->rc=node;
+					break;
+				}
+				else{
+					par=par->rc;
+				}
+			}
+		
 	}
+ }
+ cout<<"\nElement added successfully.";
+}
+void MyBtree::preorder(btree *temp){
+	if(temp!=NULL){
+	cout<<temp->data<<",";	
+	preorder(temp->lc);
+	preorder(temp->rc);
+	}
+}
+void MyBtree::inorder(btree *temp){
+	if(temp!=NULL){
+		inorder(temp->lc);
+		cout<<temp->data<<",";
+		inorder(temp->rc);
+	}
+}
+void MyBtree::postorder(btree *temp){
+	if(temp!=NULL){
+		postorder(temp->lc);
+		postorder(temp->rc);
+		cout<<temp->data<<",\b";
+	}
+}
+void MyBtree::create(){
+	int i,n;
+	btree *node;
+	cout<<"\n\tEnter the no. of node:- ";
+	cin>>n;
+	 
+	 for(i=0;i<n;i++){
+	 	node=new btree;
+	 	cout<<"\n\tEnter the "<<i+1<<" element in btree:- ";
+	 	cin>>node->data;
+	 	node->lc=NULL;
+	 	node->rc=NULL;
+	 	insert(node);
+	 	
+	 }
+	 cout<<"\nNode added successfully";
+}
+
+void MyBtree::display(){
+	cout<<"\nThe preorder traversal is:- ";
+	preorder(root);
+	cout<<"\nThe inorder traversal is:- ";
+	inorder(root);
+	cout<<"\nThe postorder traversal is:- ";
+	postorder(root);
+}
+int main(){
+	MyBtree b;
+	int ch;
+	do{
+		cout<<"\n\t\t1:create";
+		cout<<"\n\t\t2:insert";
+		cout<<"\n\t\t3:Display";
+		cout<<"\n\t\t4:Delete";
+		cout<<"\n\t\t5:Exit";
+		cout<<"\n\tEnter your choice:- ";
+		cin>>ch;
+		
+		switch(ch){
+			case 1: b.create();
+					break;
+			case 2:	btree *node;
+					node=new btree;
+					cout<<"\nEnter Element to Insert:- ";
+					cin>>node->data;
+					node->lc=NULL;
+	 				node->rc=NULL;
+	 				b.insert(node);
+	 				break;
+					 
+			case 3: b.display();
+					break;  
+			case 5: break;
+			default:cout<<"\nInvalid Choice!!";
+		}		
+	}while(ch!=5);
+}
